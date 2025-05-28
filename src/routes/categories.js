@@ -6,11 +6,11 @@ import pool from '../mysql.js';
 
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM user');
+    const [rows] = await pool.query('SELECT * FROM category');
     res.status(200).json(rows);
   } catch (error) {
     res.status(500).json({ 
-      error: 'Erro ao buscar usuários', 
+      error: 'Erro ao buscar categorias', 
       details: error.message || error 
     });
   }
@@ -27,8 +27,8 @@ router.post('/', (req, res) => {
     }
 
     conn.query(
-        'INSERT INTO user (name, email, password) VALUES (?, ?, ?)',
-        [req.body.name, req.body.email, req.body.password],
+        'INSERT INTO category (name) VALUES (?)',
+        [req.body.name],
         (error, resultado, fields) => {
             conn.release();
 
@@ -40,8 +40,8 @@ router.post('/', (req, res) => {
             }
 
             res.status(201).send({
-                message: 'Usuário criado com sucesso',
-                id_user: resultado.insertId
+                message: 'Categoria criada com sucesso',
+                id_category: resultado.insertId
             });
         }
     );
