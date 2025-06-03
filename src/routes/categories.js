@@ -1,52 +1,44 @@
 import express from 'express';
-import mysqlModule from '../mysql.js';
 const router = express.Router();
-const mysql = mysqlModule.pool;
-import pool from '../mysql.js';
+import db from '../models/index.js';
+const { category: Category } = db;
 
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM category');
-    res.status(200).json(rows);
+    const categories = await Category.findAll();
+    res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ 
-      error: 'Erro ao buscar categorias', 
-      details: error.message || error 
+      message: 'Erro ao buscar categorias', 
+      error: error.message || error 
     });
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  const { name } = req.body;
 
-    mysql.getConnection((error, conn) => {
-    if (error) {
-        return res.status(500).send({
-            message: 'Erro ao conectar ao banco de dados',
-            error: error
-        });
-    }
+  if (!name || name.trim() === '') {
+    return res.status(400).json({ message: 'O nome da categoria é obrigatório' });
+  }
 
-    conn.query(
-        'INSERT INTO category (name) VALUES (?)',
-        [req.body.name],
-        (error, resultado, fields) => {
-            conn.release();
+  try {
+    const newCategory = await Category.create({ name });
 
-            if (error) {
-                return res.status(500).send({
-                    message: 'Erro ao executar a query',
-                    error: error
-                });
-            }
+    res.status(201).json({
+      message: 'Categoria criada com sucesso',
+      category: {
+        id_category: newCategory.id_category,
+        name: newCategory.name
+      }
+    });
 
-            res.status(201).send({
-                message: 'Categoria criada com sucesso',
-                id_category: resultado.insertId
-            });
-        }
-    );
-});
-
+  } catch (error) {
+    res.status(500).json({
+      message: 'Erro ao criar categoria',
+      error: error.message || error
+    });
+  }
 });
 
 export default router;

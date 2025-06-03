@@ -1,13 +1,12 @@
 import express from 'express';
-import mysqlModule from '../mysql.js';
 const router = express.Router();
-const mysql = mysqlModule.pool;
-import pool from '../mysql.js';
+import db from '../models/index.js';
+const { user: User } = db;
 
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM user');
-    res.status(200).json(rows);
+    const users = await User.findAll();
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ 
       error: 'Erro ao buscar usuários', 
@@ -16,37 +15,27 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
-
-    mysql.getConnection((error, conn) => {
-    if (error) {
-        return res.status(500).send({
-            message: 'Erro ao conectar ao banco de dados',
-            error: error
-        });
+router.post('/', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    conn.query(
-        'INSERT INTO user (name, email, password) VALUES (?, ?, ?)',
-        [req.body.name, req.body.email, req.body.password],
-        (error, resultado, fields) => {
-            conn.release();
+    const newUser = await User.create({ name, email, password });
 
-            if (error) {
-                return res.status(500).send({
-                    message: 'Erro ao executar a query',
-                    error: error
-                });
-            }
+    res.status(201).json({
+      message: 'Usuário criado com sucesso',
+      id_user: newUser.id_user
+    });
 
-            res.status(201).send({
-                message: 'Usuário criado com sucesso',
-                id_user: resultado.insertId
-            });
-        }
-    );
-});
-
+  } catch (error) {
+    res.status(500).json({
+      message: 'Erro ao criar usuário',
+      error: error.message || error
+    });
+  }
 });
 
 export default router;
