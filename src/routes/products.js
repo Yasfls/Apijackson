@@ -79,4 +79,36 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put("/:id_product", async (req, res) => {
+  const { id_product } = req.params;
+  const { name, price, idCategory } = req.body;
+
+  try {
+    const product = await Product.findByPk(id_product);
+
+    if (!product) {
+      return res.status(404).json({ error: "Produto não encontrado" });
+    }
+
+    if (name) product.name = name;
+    if (price) product.price = price;
+    if (idCategory) {
+      const categoryExists = await Category.findByPk(idCategory);
+      if (!categoryExists) {
+        return res.status(404).json({ error: "Categoria não encontrada" });
+      }
+      product.idCategory = idCategory;
+    }
+
+    await product.save();
+
+    res.status(200).json({ message: "Produto atualizado com sucesso" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erro ao atualizar produto",
+      error: error.message || error,
+    });
+  }
+});
+
 export default router;
