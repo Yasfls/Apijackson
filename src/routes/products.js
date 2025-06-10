@@ -20,6 +20,30 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findByPk(id, {
+      include: [{
+        model: Category,
+        as: 'category',
+      }]
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: 'Produto não encontrado' });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Erro ao buscar produto',
+      details: error.message || error,
+    });
+  }
+});
+
 router.post('/', async (req, res) => {
   const { name, price, idCategory } = req.body;
 

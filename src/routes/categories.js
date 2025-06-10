@@ -41,4 +41,28 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put("/:id_category", async (req, res) => {
+  const { id_category } = req.params;
+  const { name } = req.body;
+
+  try {
+    const category = await Category.findByPk(id_category);
+
+    if (!category) {
+      return res.status(404).json({ error: "Categoria não encontrada" });
+    }
+
+    if (name) category.name = name;
+
+    await category.save();
+
+    res.status(200).json({ message: "Categoria atualizada com sucesso" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erro ao atualizar categoria",
+      error: error.message || error,
+    });
+  }
+});
+
 export default router;
