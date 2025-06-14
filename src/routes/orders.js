@@ -1,56 +1,16 @@
 import express from 'express';
+import orderController from '../controllers/orderController.js';
+
 const router = express.Router();
-import db from '../models/index.js';
-const { order: Order, product: Product, user: User } = db;
 
-router.get('/', async (req, res) => {
-  try {
-    const orders = await Order.findAll({
-      include: [
-        {
-          model: Product,
-          as: 'products',
-          through: { attributes: [] },
-        },
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id_user', 'name', 'email'],
-        }
-      ]
-    });
+router.post('/addOrder', orderController.addOrder);
 
-    res.status(200).json(orders);
-  } catch (error) {
-    res.status(500).json({
-      message: 'Erro ao buscar pedidos',
-      error: error.message || error
-    });
-  }
-});
+router.get('/AllOrders', orderController.getAllOrders);
 
-router.post('/', async (req, res) => {
-  const { idUser, productIds } = req.body;
+router.get('/:id', orderController.getSingleOrder);
 
-  if (!idUser || !Array.isArray(productIds) || productIds.length === 0) {
-    return res.status(400).json({ message: 'IDs de usuário e produtos são obrigatórios' });
-  }
+router.put('/:id', orderController.updateOrder);
 
-  try {
-    const newOrder = await Order.create({ idUser });
-
-    await newOrder.addProducts(productIds);
-
-    res.status(201).json({
-      message: 'Pedido criado com sucesso',
-      id_order: newOrder.id_order
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Erro ao criar pedido',
-      error: error.message || error
-    });
-  }
-});
+router.delete('/:id', orderController.deleteOrder);
 
 export default router;

@@ -1,13 +1,13 @@
 import { where } from 'sequelize';
-import db from '../models/index.js';
+import db from '../models/index.js'
 
 const Product = db.product;
 
 const addProduct = async (req, res) => {
     let info = {
-        id_product: req.body.id_product,
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        idCategory: req.body.idCategory
     }
 
     const product = await Product.create(info)
@@ -40,7 +40,7 @@ const deleteProduct = async (req, res) => {
 
 }
 
-module.exports = {
+export default{
     addProduct,
     getAllProducts,
     getSingleProduct,
