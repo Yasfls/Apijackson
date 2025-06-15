@@ -47,10 +47,36 @@ const getSingleUser = async (req, res) => {
 
 // PUT
 const updateUser = async (req, res) => {
-    let id = req.params.id;
-    const user = await User.update(req.body, { where: { id_user: id } });
-    res.status(200).send(`Usuário editado com sucesso: ${id}`);
-}
+    const id = req.params.id;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).send({ message: 'Usuário não encontrado' });
+        }
+
+        const { name, email, password } = req.body;
+        const updatedData = {};
+
+        if (name) updatedData.name = name;
+        if (email) updatedData.email = email;
+        
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updatedData.password = hashedPassword;
+        }
+
+        await User.update(updatedData, { where: { id_user: id } });
+
+        res.status(200).send({ message: `Usuário editado com sucesso: ${id}` });
+
+    } catch (error) {
+        console.error('Erro ao atualizar usuário:', error.message);
+        res.status(500).send({ message: 'Erro ao atualizar usuário', error: error.message });
+    }
+};
 
 // DELETE
 const deleteUser = async (req, res) => {

@@ -3,23 +3,143 @@ import categoryController from '../controllers/categoryController.js';
 
 const router = express.Router();
 
-// Rotas para as requisições de categorias
+/**
+ * @swagger
+ * tags:
+ *   name: Categories
+ *   description: Rotas de gerenciamento de categorias
+ */
 
-// Para criar uma categoria utilize a URL: http://localhost:3000/api/categories/addCategory
+/**
+ * @swagger
+ * /api/categories/addCategory:
+ *   post:
+ *     summary: Cria uma nova categoria
+ *     tags: [Categories]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Eletrônicos
+ *     responses:
+ *       200:
+ *         description: Categoria criada com sucesso
+ *       500:
+ *         description: Erro ao criar categoria
+ */
 router.post('/addCategory', categoryController.addCategory);
 
-// Para listar todas as categorias utilize a URL: http://localhost:3000/api/categories/AllCategories
+/**
+ * @swagger
+ * /api/categories/AllCategories:
+ *   get:
+ *     summary: Lista todas as categorias
+ *     tags: [Categories]
+ *     responses:
+ *       200:
+ *         description: Lista de categorias
+ *       500:
+ *         description: Erro ao buscar categorias
+ */
 router.get('/AllCategories', categoryController.getAllCategories);
 
-// Para procurar por uma categoria por ID utilize a URL: http://localhost:3000/api/categories/("id da categoria")
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Busca uma categoria pelo ID
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID da categoria
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Categoria encontrada
+ *       404:
+ *         description: Categoria não encontrada
+ */
 router.get('/:id', categoryController.getSingleCategory);
 
-// Para realizar um update de uma categoria por ID utilize a URL: http://localhost:3000/api/categories/("id da categoria")
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   put:
+ *     summary: Atualiza uma categoria pelo ID
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID da categoria
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Informática
+ *     responses:
+ *       200:
+ *         description: Categoria atualizada com sucesso
+ *       404:
+ *         description: Categoria não encontrada
+ */
 router.put('/:id', categoryController.updateCategory);
 
-// Para deletar uma categoria por ID utilize a URL: http://localhost:3000/api/categories/("id da categoria")
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Deleta uma categoria pelo ID
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID da categoria
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Categoria deletada com sucesso
+ *       404:
+ *         description: Categoria não encontrada
+ */
 router.delete('/:id', categoryController.deleteCategory);
 
+/**
+ * @swagger
+ * /api/categories/getProductsbyCategory/{id}:
+ *   get:
+ *     summary: Busca os produtos de uma categoria pelo ID
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID da categoria
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de produtos da categoria
+ *       404:
+ *         description: Categoria não encontrada
+ */
 router.get('/getProductsbyCategory/:id', categoryController.getProductsbyCategory);
 
 export default router;

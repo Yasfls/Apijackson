@@ -4,18 +4,116 @@ import { authenticateToken } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Rotas para as requisições de pedidos (USUÁRIO PRECISA ESTAR LOGADO E AUTENTICADO PARA ACESSAR)
+/**
+ * @swagger
+ * tags:
+ *   name: Orders
+ *   description: Rotas relacionadas aos pedidos (requer autenticação)
+ */
 
-// Para criar um pedido utilize a URL: http://localhost:3000/api/orders/addOrder
+/**
+ * @swagger
+ * /api/orders/addOrder:
+ *   post:
+ *     summary: Cria um novo pedido
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *                 example: 1
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id_product:
+ *                       type: integer
+ *                       example: 2
+ *                     quant:
+ *                       type: integer
+ *                       example: 3
+ *     responses:
+ *       200:
+ *         description: Pedido criado com sucesso
+ *       401:
+ *         description: Não autorizado
+ *       500:
+ *         description: Erro no servidor
+ */
 router.post('/addOrder', authenticateToken, orderController.addOrder);
 
-// Para listar todos os pedidos utilize a URL: http://localhost:3000/api/orders/allOrders
+/**
+ * @swagger
+ * /api/orders/AllOrders:
+ *   get:
+ *     summary: Lista todos os pedidos
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de pedidos
+ *       401:
+ *         description: Não autorizado
+ */
 router.get('/AllOrders', authenticateToken, orderController.getAllOrders);
 
-// Para procurar por um pedido por ID utilize a URL: http://localhost:3000/api/orders/("id do pedido")
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Busca um pedido pelo ID
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID do pedido
+ *     responses:
+ *       200:
+ *         description: Pedido encontrado
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Pedido não encontrado
+ */
 router.get('/:id', authenticateToken, orderController.getSingleOrder);
 
-// Para deletar um pedido por ID utilize a URL: http://localhost:3000/api/orders/("id do pedido")
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   delete:
+ *     summary: Deleta um pedido pelo ID
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID do pedido
+ *     responses:
+ *       200:
+ *         description: Pedido deletado com sucesso
+ *       401:
+ *         description: Não autorizado
+ *       404:
+ *         description: Pedido não encontrado
+ */
 router.delete('/:id', authenticateToken, orderController.deleteOrder);
 
 export default router;

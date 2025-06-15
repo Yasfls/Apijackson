@@ -1,6 +1,7 @@
 //importando express e o banco de dados
 import express from 'express';
 import db from './models/index.js';
+import swaggerDocs from './docs/swagger.js';
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use('/api/orders', ordersRouter);
 import productsRouter from './routes/products.js';
 app.use('/api/products', productsRouter);
 
+swaggerDocs(app);
 
 //nicialização do servidor na porta 3000
 db.sequelize.sync().then((req) => {
