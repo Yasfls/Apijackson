@@ -1,7 +1,7 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
 
-const User = db.user;
+const User = db.User;
 
 // POST
 const addUser = async (req, res) => {

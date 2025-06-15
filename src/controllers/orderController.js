@@ -1,20 +1,35 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
 
-const Order = db.order;
+const Order = db.Order;
+const OrderProduct = db.OrderProduct;
 
 // POST
 const addOrder = async (req, res) => {
-    let info = {
-        id_user: req.body.id_user,
-        id_product: req.body.id_product,
-        quantity: req.body.quantity
-    }
+  const { id_user, products } = req.body;
 
-    const order = await Order.create(info)
-    res.status(200).send(order);
+  try {
+    const order = await Order.create({ idUser: id_user });
+
+    const orderProducts = products.map((item) => ({
+      orderId: order.id_order,
+      productId: item.id_product,
+      quant: item.quantity
+    }));
+
+    await OrderProduct.bulkCreate(orderProducts);
+
+    res.status(201).json({
+      message: 'Pedido Feito com Sucesso',
+      orderId: order.id_order
+    });
+
     console.log(`Pedido feito: ${order.id_order}`);
-}
+  } catch (error) {
+    console.error('Erro ao criar pedido:', error);
+    res.status(500).json({ error: 'Erro ao criar pedido' });
+  }
+};
 
 // GET
 const getAllOrders = async (req, res) => {

@@ -29,5 +29,12 @@ export default (sequelize, DataTypes) => {
     },
   });
 
+  User.associate = (models) => {
+    User.hasMany(models.Order, {
+      foreignKey: 'user_id',
+      as: 'orders'
+    });
+  };
+
   return User;
 };

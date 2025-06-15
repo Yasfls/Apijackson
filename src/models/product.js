@@ -23,28 +23,16 @@ export default (sequelize, DataTypes) => {
   });
 
   Product.associate = (models) => {
-    Product.belongsTo(models.category, {
-      foreignKey: 'idCategory',
-      as: 'category',
+    Product.belongsTo(models.Category, {
+      foreignKey: 'category_id',
+      as: 'category'
     });
 
-    models.category.hasMany(Product, {
-      foreignKey: 'idCategory',
-      as: 'products',
-    });
-
-    Product.belongsToMany(models.order, {
-      through: models.order_product,
-      foreignKey: 'idProduct',
-      otherKey: 'idOrder',
-      as: 'orders',
-    });
-
-    models.order.belongsToMany(Product, {
-      through: models.order_product,
-      foreignKey: 'idOrder',
-      otherKey: 'idProduct',
-      as: 'products',
+    Product.belongsToMany(models.Order, {
+      through: models.OrderProduct,
+      foreignKey: 'product_id',
+      otherKey: 'order_id',
+      as: 'orders'
     });
   };
 

@@ -1,7 +1,9 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
 
-const Product = db.product;
+const Product = db.Product;
+const Category = db.Category;
+const Order = db.Order;
 
 // POST
 const addProduct = async (req, res) => {
@@ -34,14 +36,14 @@ const getSingleProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     let id = req.params.id;
     const product = await Product.update(req.body, { where: { id_product: id } });
-    res.status(200).send(`Produto editado com sucesso: ${id_product}`);
+    res.status(200).send(`Produto editado com sucesso: ${id}`);
 }
 
 // DELETE
 const deleteProduct = async (req, res) => {
     let id = req.params.id;
     await Product.destroy({ where: { id_product: id } });
-    res.status(200).send(`Produto deletado com sucesso: ${id_product}`);
+    res.status(200).send(`Produto deletado com sucesso: ${id}`);
 
 }
 

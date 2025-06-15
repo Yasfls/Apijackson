@@ -20,4 +20,6 @@ router.put('/:id', categoryController.updateCategory);
 // Para deletar uma categoria por ID utilize a URL: http://localhost:3000/api/categories/("id da categoria")
 router.delete('/:id', categoryController.deleteCategory);
 
+router.get('/getProductsbyCategory/:id', categoryController.getProductsbyCategory);
+
 export default router;

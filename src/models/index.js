@@ -31,12 +31,18 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = UserModel(sequelize, DataTypes);
-db.category = CategoryModel(sequelize, DataTypes);
-db.product = ProductModel(sequelize, DataTypes);
-db.order = OrderModel(sequelize, DataTypes);
-db.orderProduct = OrderProductModel(sequelize, DataTypes);
+db.User = UserModel(sequelize, DataTypes);
+db.Category = CategoryModel(sequelize, DataTypes);
+db.Product = ProductModel(sequelize, DataTypes);
+db.Order = OrderModel(sequelize, DataTypes);
+db.OrderProduct = OrderProductModel(sequelize, DataTypes);
 
+// Relacionamentos das tabelas
+db.User.associate(db);
+db.Category.associate(db);
+db.Product.associate(db);
+db.Order.associate(db);
+db.OrderProduct.associate(db);
 
 try {
   await sequelize.sync({ force: false });

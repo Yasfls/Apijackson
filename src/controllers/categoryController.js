@@ -1,7 +1,8 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
 
-const Category = db.category;
+const Category = db.Category;
+const Product = db.Product;
 
 // POST
 const addCategory = async (req, res) => {
@@ -43,10 +44,24 @@ const deleteCategory = async (req, res) => {
 
 }
 
+//GET
+const getProductsbyCategory = async (req, res) => {
+
+    const data = await Category.findAll({
+        include: [{
+        model: Product,
+        as: 'products'
+    }],
+    where: { id_category: req.params.id }
+    });
+    res.status(200).json(data);
+}
+
 export default {
     addCategory,
     getAllCategories,
     getSingleCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getProductsbyCategory
 }
