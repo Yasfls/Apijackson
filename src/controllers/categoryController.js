@@ -3,6 +3,7 @@ import db from '../models/index.js'
 
 const Category = db.category;
 
+// POST
 const addCategory = async (req, res) => {
     let info = {
         name: req.body.name
@@ -10,14 +11,16 @@ const addCategory = async (req, res) => {
 
     const category = await Category.create(info)
     res.status(200).send(category);
-    console.log(`Categoria adicionada: ${category.name}`);
+    console.log(`Categoria criada: ${category.name}`);
 }
 
+// GET
 const getAllCategories = async (req, res) => {
     let categories = await Category.findAll({});
     res.status(200).send(categories);
 }
 
+// GET
 const getSingleCategory = async (req, res) => {
     let id = req.params.id;
     let category = await Category.findOne({ where: { id_category: id } });
@@ -25,12 +28,14 @@ const getSingleCategory = async (req, res) => {
 
 }
 
+// PUT
 const updateCategory = async (req, res) => {
     let id = req.params.id;
     const category = await Category.update(req.body, { where: { id_category: id } });
-    res.status(200).send(category);
+    res.status(200).send(`Categoria editada com sucesso: ${id}`);
 }
 
+// DELETE
 const deleteCategory = async (req, res) => {
     let id = req.params.id;
     await Category.destroy({ where: { id_category: id } });

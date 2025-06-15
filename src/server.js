@@ -1,3 +1,4 @@
+//importando express e o banco de dados
 import express from 'express';
 import db from './models/index.js';
 
@@ -18,7 +19,7 @@ import productsRouter from './routes/products.js';
 app.use('/api/products', productsRouter);
 
 
-// conexão com o banco de dados e inicialização do servidor na porta 3000
+//nicialização do servidor na porta 3000
 db.sequelize.sync().then((req) => {
   app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');

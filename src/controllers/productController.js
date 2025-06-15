@@ -3,6 +3,7 @@ import db from '../models/index.js'
 
 const Product = db.product;
 
+// POST
 const addProduct = async (req, res) => {
     let info = {
         name: req.body.name,
@@ -12,14 +13,16 @@ const addProduct = async (req, res) => {
 
     const product = await Product.create(info)
     res.status(200).send(product);
-    console.log(`Produto adicionado: ${product.name}`);
+    console.log(`Produto criado: ${product.name}`);
 }
 
+// GET
 const getAllProducts = async (req, res) => {
     let products = await Product.findAll({});
     res.status(200).send(products);
 }
 
+// GET
 const getSingleProduct = async (req, res) => {
     let id = req.params.id;
     let product = await Product.findOne({ where: { id_product: id } });
@@ -27,12 +30,14 @@ const getSingleProduct = async (req, res) => {
 
 }
 
+// PUT
 const updateProduct = async (req, res) => {
     let id = req.params.id;
     const product = await Product.update(req.body, { where: { id_product: id } });
-    res.status(200).send(product);
+    res.status(200).send(`Produto editado com sucesso: ${id_product}`);
 }
 
+// DELETE
 const deleteProduct = async (req, res) => {
     let id = req.params.id;
     await Product.destroy({ where: { id_product: id } });
