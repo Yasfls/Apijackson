@@ -1,20 +1,29 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
+import bcrypt from 'bcrypt';
 
 const User = db.User;
 
 // POST
 const addUser = async (req, res) => {
-    let info = {
+    try {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        let info = {
         id_user: req.body.id_user,
         name: req.body.name,
-        password: req.body.password,
+        password: hashedPassword,
         email: req.body.email
     }
 
     const user = await User.create(info)
     res.status(200).send(user);
     console.log(`Usuário adicionado: ${user.name}`);
+    } catch {
+        res.status(500).send('Erro ao adicionar usuário');
+    }
+    
 }
 
 // GET
@@ -48,10 +57,35 @@ const deleteUser = async (req, res) => {
 
 }
 
+//POST
+const loginUser = async (req, res) => {
+  const { name, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { name } });
+
+    if (!user) {
+      return res.status(400).send('Usuário não encontrado');
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (validPassword) {
+      res.status(200).send('Usuário logado com sucesso');
+    } else {
+      res.status(400).send('Senha incorreta');
+    }
+  } catch (error) {
+    console.error('Erro no login:', error);
+    res.status(500).send('Erro no servidor');
+  }
+}
+
 export default {
     addUser,
     getAllUsers,
     getSingleUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 }

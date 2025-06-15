@@ -20,4 +20,7 @@ router.put('/:id', userController.updateUser);
 // Para deletar um usuário por ID utilize a URL: http://localhost:3000/api/users/("id do usuário")
 router.delete('/:id', userController.deleteUser);
 
+// Para realizar o login de um usuário utilize a URL: http://localhost:3000/api/users/login
+router.post('/login', userController.loginUser);
+
 export default router;
