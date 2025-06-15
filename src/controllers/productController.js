@@ -10,7 +10,7 @@ const addProduct = async (req, res) => {
     let info = {
         name: req.body.name,
         price: req.body.price,
-        idCategory: req.body.idCategory
+        category_id: req.body.category_id
     }
 
     const product = await Product.create(info)

@@ -20,6 +20,10 @@ export default (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    category_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   });
 
   Product.associate = (models) => {
@@ -31,7 +35,6 @@ export default (sequelize, DataTypes) => {
     Product.belongsToMany(models.Order, {
       through: models.OrderProduct,
       foreignKey: 'product_id',
-      otherKey: 'order_id',
       as: 'orders'
     });
   };

@@ -6,15 +6,15 @@ const OrderProduct = db.OrderProduct;
 
 // POST
 const addOrder = async (req, res) => {
-  const { id_user, products } = req.body;
+  const { user_id, products } = req.body;
 
   try {
-    const order = await Order.create({ idUser: id_user });
+    const order = await Order.create({ user_id: user_id });
 
     const orderProducts = products.map((item) => ({
-      orderId: order.id_order,
-      productId: item.id_product,
-      quant: item.quantity
+      order_id: order.id_order,
+      product_id: item.id_product,
+      quantity: item.quantity
     }));
 
     await OrderProduct.bulkCreate(orderProducts);
@@ -29,7 +29,7 @@ const addOrder = async (req, res) => {
     console.error('Erro ao criar pedido:', error);
     res.status(500).json({ error: 'Erro ao criar pedido' });
   }
-};
+}
 
 // GET
 const getAllOrders = async (req, res) => {

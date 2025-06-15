@@ -6,12 +6,14 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    id_order: {
+    order_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
+      references: {
+        model: 'orders',
+        key: 'id_order'
+      }
     },
-    id_product: {
+    product_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -24,15 +26,17 @@ export default (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-});
+  });
 
   OrderProduct.associate = (models) => {
     OrderProduct.belongsTo(models.Order, {
-      foreignKey: 'order_id'
+      foreignKey: 'order_id',
+      as: 'order'
     });
 
     OrderProduct.belongsTo(models.Product, {
-      foreignKey: 'product_id'
+      foreignKey: 'product_id',
+      as: 'product'
     });
   };
 

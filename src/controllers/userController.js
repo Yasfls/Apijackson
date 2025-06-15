@@ -1,6 +1,9 @@
 import { where } from 'sequelize';
 import db from '../models/index.js'
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config({ path: './config/.env' });
 
 const User = db.User;
 
@@ -57,7 +60,6 @@ const deleteUser = async (req, res) => {
 
 }
 
-//POST
 const loginUser = async (req, res) => {
   const { name, password } = req.body;
 
@@ -70,11 +72,18 @@ const loginUser = async (req, res) => {
 
     const validPassword = await bcrypt.compare(password, user.password);
 
-    if (validPassword) {
-      res.status(200).send('Usuário logado com sucesso');
-    } else {
-      res.status(400).send('Senha incorreta');
+    if (!validPassword) {
+      return res.status(400).send('Senha incorreta');
     }
+
+    const accessToken = jwt.sign(
+      { id: user.id_user, name: user.name },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ message: 'Usuário logado com sucesso', accessToken });
+
   } catch (error) {
     console.error('Erro no login:', error);
     res.status(500).send('Erro no servidor');
