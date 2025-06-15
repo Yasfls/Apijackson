@@ -42,6 +42,5 @@ export default {
     addOrder,
     getAllOrders,
     getSingleOrder,
-    updateOrder,
     deleteOrder
 }
