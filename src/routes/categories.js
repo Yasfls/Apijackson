@@ -27,7 +27,7 @@ const router = express.Router();
  *                 type: string
  *                 example: Eletrônicos
  *     responses:
- *       200:
+ *       201:
  *         description: Categoria criada com sucesso
  *       500:
  *         description: Erro ao criar categoria

@@ -1,5 +1,5 @@
-import express from 'express';
-import productController from '../controllers/productController.js';
+import express from "express";
+import productController from "../controllers/productController.js";
 
 const router = express.Router();
 
@@ -19,8 +19,10 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Lista de produtos.
+ *       500:
+ *         description: Erro ao buscar produtos.
  */
-router.get('/AllProducts', productController.getAllProducts);
+router.get("/AllProducts", productController.getAllProducts);
 
 /**
  * @swagger
@@ -46,10 +48,12 @@ router.get('/AllProducts', productController.getAllProducts);
  *               category_id:
  *                 type: integer
  *     responses:
- *       200:
+ *       201:
  *         description: Produto criado com sucesso
+ *       500:
+ *         description: Erro ao criar produto
  */
-router.post('/addProduct', productController.addProduct);
+router.post("/addProduct", productController.addProduct);
 
 /**
  * @swagger
@@ -67,8 +71,10 @@ router.post('/addProduct', productController.addProduct);
  *     responses:
  *       200:
  *         description: Produto encontrado
+ *      500:
+ *        description: Erro ao buscar produto
  */
-router.get('/:id', productController.getSingleProduct);
+router.get("/:id", productController.getSingleProduct);
 
 /**
  * @swagger
@@ -99,8 +105,10 @@ router.get('/:id', productController.getSingleProduct);
  *     responses:
  *       200:
  *         description: Produto atualizado com sucesso
+ *       500:
+ *         description: Erro ao atualizar produto
  */
-router.put('/:id', productController.updateProduct);
+router.put("/:id", productController.updateProduct);
 
 /**
  * @swagger
@@ -118,7 +126,9 @@ router.put('/:id', productController.updateProduct);
  *     responses:
  *       200:
  *         description: Produto deletado com sucesso
+ *       500:
+ *         description: Erro ao deletar produto
  */
-router.delete('/:id', productController.deleteProduct);
+router.delete("/:id", productController.deleteProduct);
 
 export default router;

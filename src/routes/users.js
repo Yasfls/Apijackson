@@ -49,6 +49,8 @@ router.post('/addUser', userController.addUser);
  *     responses:
  *       200:
  *         description: Lista de usuários
+ *       500:
+ *         description: Erro ao buscar usuários
  */
 router.get('/AllUsers', userController.getAllUsers);
 
@@ -70,6 +72,8 @@ router.get('/AllUsers', userController.getAllUsers);
  *         description: Usuário encontrado
  *       404:
  *         description: Usuário não encontrado
+ *       500:
+ *         description: Erro ao buscar usuário
  */
 router.get('/:id', userController.getSingleUser);
 
@@ -107,6 +111,8 @@ router.get('/:id', userController.getSingleUser);
  *         description: Usuário atualizado com sucesso
  *       404:
  *         description: Usuário não encontrado
+ *       500:
+ *         description: Erro ao atualizar usuário
  */
 router.put('/:id', userController.updateUser);
 
@@ -128,6 +134,8 @@ router.put('/:id', userController.updateUser);
  *         description: Usuário deletado com sucesso
  *       404:
  *         description: Usuário não encontrado
+ *       500:
+ *         description: Erro ao deletar usuário
  */
 router.delete('/:id', userController.deleteUser);
 
@@ -155,6 +163,8 @@ router.delete('/:id', userController.deleteUser);
  *         description: Login realizado com sucesso
  *       400:
  *         description: Usuário não encontrado ou senha incorreta
+ *       500:
+ *         description: Erro no servidor
  */
 router.post('/login', userController.loginUser);
 

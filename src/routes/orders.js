@@ -41,7 +41,7 @@ const router = express.Router();
  *                       type: integer
  *                       example: 3
  *     responses:
- *       200:
+ *       201:
  *         description: Pedido criado com sucesso
  *       401:
  *         description: Não autorizado
@@ -63,6 +63,8 @@ router.post('/addOrder', authenticateToken, orderController.addOrder);
  *         description: Lista de pedidos
  *       401:
  *         description: Não autorizado
+ *       500:
+ *         description: Erro ao buscar pedidos
  */
 router.get('/AllOrders', authenticateToken, orderController.getAllOrders);
 
@@ -88,6 +90,8 @@ router.get('/AllOrders', authenticateToken, orderController.getAllOrders);
  *         description: Não autorizado
  *       404:
  *         description: Pedido não encontrado
+ *       500:
+ *         description: Erro ao buscar pedido
  */
 router.get('/:id', authenticateToken, orderController.getSingleOrder);
 
@@ -113,6 +117,8 @@ router.get('/:id', authenticateToken, orderController.getSingleOrder);
  *         description: Não autorizado
  *       404:
  *         description: Pedido não encontrado
+ *       500:
+ *         description: Erro ao deletar pedido
  */
 router.delete('/:id', authenticateToken, orderController.deleteOrder);
 
